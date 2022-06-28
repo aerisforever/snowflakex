@@ -17,6 +17,8 @@ defmodule Snowflakex.Worker do
   @rollover_seq 4096
   @snx_epoch 1_656_420_417_000
 
+  def get_epoch(), do: @snx_epoch
+
   def child_spec(args) do
     %{
       id: __MODULE__,

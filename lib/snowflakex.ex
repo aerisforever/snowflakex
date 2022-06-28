@@ -6,6 +6,7 @@ defmodule Snowflakex do
   Main module of Snowflakex.
   """
   use Application
+  use Bitwise
 
   @doc """
   Callback implementation for `Application.start/2`.
@@ -37,5 +38,12 @@ defmodule Snowflakex do
       %Snowflakex.ClockError{} = error -> raise error
       snowflake -> snowflake
     end
+  end
+
+  @doc """
+  Get timestamp from snowflake
+  """
+  def timestamp(id) do
+    (id >>> 22) + Snowflakex.Worker.get_epoch()
   end
 end
