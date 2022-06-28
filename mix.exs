@@ -1,4 +1,3 @@
-
 # Created by Patrick Schneider on 05.12.2016.
 # Copyright (c) 2016,2020 MeetNow! GmbH
 
@@ -9,13 +8,13 @@ defmodule Snowflakex.Mixfile do
     [
       app: :snowflakex,
       version: "1.1.1",
-      description: "A service for generating unique ID numbers at high scale with some simple guarantees",
+      description:
+        "A service for generating unique ID numbers at high scale with some simple guarantees",
       elixir: "~> 1.5",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
-
       name: "Snowflakex",
       source_url: "https://github.com/meetnow/snowflakex",
       homepage_url: "https://github.com/meetnow/snowflakex",

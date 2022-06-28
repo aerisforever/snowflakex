@@ -1,4 +1,3 @@
-
 # Created by Patrick Schneider on 05.12.2016.
 # Copyright (c) 2016,2020 MeetNow! GmbH
 

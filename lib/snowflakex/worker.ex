@@ -1,4 +1,3 @@
-
 # Created by Patrick Schneider on 05.12.2016.
 # Copyright (c) 2016,2020 MeetNow! GmbH
 
@@ -40,26 +39,36 @@ defmodule Snowflakex.Worker do
 
   @impl true
   def handle_call(:new, _from, {machine_id, last_ts, seq}) do
-    {ts, seq} = case get_ts() do
-      ^last_ts ->
-        case seq + 1 do
-          @rollover_seq -> {busy_wait_timechange(last_ts), 0}
-          next_seq -> {last_ts, next_seq}
-        end
-      ts ->
-        {ts, 0}
-    end
+    {ts, seq} =
+      case get_ts() do
+        ^last_ts ->
+          case seq + 1 do
+            @rollover_seq -> {busy_wait_timechange(last_ts), 0}
+            next_seq -> {last_ts, next_seq}
+          end
+
+        ts ->
+          {ts, 0}
+      end
+
     if ts < last_ts do
-      Logger.error "Snowflakex: Clock is moving backwards. Rejecting requests until #{last_ts}."
+      Logger.error("Snowflakex: Clock is moving backwards. Rejecting requests until #{last_ts}.")
       remaining = last_ts - ts
-      {:reply, %Snowflakex.ClockError{message: "Clock moved backwards. Refusing to generate an ID for #{remaining} milliseconds.", remaining: remaining}, {machine_id, last_ts, seq}}
+
+      {:reply,
+       %Snowflakex.ClockError{
+         message:
+           "Clock moved backwards. Refusing to generate an ID for #{remaining} milliseconds.",
+         remaining: remaining
+       }, {machine_id, last_ts, seq}}
     else
-      <<new_id :: integer-size(64)>> = <<
-        0 :: size(1),
-        ts :: unsigned-integer-size(41),
-        machine_id :: unsigned-integer-size(10),
-        seq :: unsigned-integer-size(12)
+      <<new_id::integer-size(64)>> = <<
+        0::size(1),
+        ts::unsigned-integer-size(41),
+        machine_id::unsigned-integer-size(10),
+        seq::unsigned-integer-size(12)
       >>
+
       {:reply, new_id, {machine_id, ts, seq}}
     end
   end
