@@ -16,7 +16,7 @@ defmodule Snowflakex.Worker do
 
   @max_machine_id 1023
   @rollover_seq 4096
-  @snx_epoch 1480927901749
+  @snx_epoch 1_656_420_417_000
 
   def child_spec(args) do
     %{
