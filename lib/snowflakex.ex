@@ -6,7 +6,7 @@ defmodule Snowflakex do
   Main module of Snowflakex.
   """
   use Application
-  use Bitwise
+  import Bitwise
 
   @doc """
   Callback implementation for `Application.start/2`.
